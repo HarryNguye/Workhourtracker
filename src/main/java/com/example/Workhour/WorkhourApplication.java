@@ -9,5 +9,4 @@ public class WorkhourApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WorkhourApplication.class, args);
 	}
-
 }

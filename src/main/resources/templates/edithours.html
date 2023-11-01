@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Muokkaa Työtunti</title>
+</head>
+<body>
+    <h1>Muokkaa Työtunti</h1>
+    <form th:action="@{/edit/{id}(id=${workHour.id})}" th:object="${workHour}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <label for="date">Päivämäärä:</label>
+        <input type="date" th:field="*{date}" required><br>
+        <label for="hours">Tunnit:</label>
+        <input type="number" th:field="*{hours}" required><br>
+        <button type="submit">Päivitä</button>
+    </form>
+</body>
+</html>
