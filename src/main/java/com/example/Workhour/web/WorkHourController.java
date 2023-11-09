@@ -1,82 +1,110 @@
 package com.example.Workhour.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.Workhour.domain.WorkHour;
 import com.example.Workhour.domain.WorkHourRepository;
-import com.example.Workhour.domain.User;
-import com.example.Workhour.domain.UserRepository;
-
-
-
-import java.util.List;
-import java.util.Optional;
 
 @Controller
-@RequestMapping("/index")
 public class WorkHourController {
 
-    @Autowired
-    private WorkHourRepository repository;
-    
+	@Autowired
+	private WorkHourRepository repository;
 
-    // NÄYTÄ KAIKKI TYÖTUNNIT
-    // Käytetään näyttämään lista kaikista tietokannassa olevista työtunneista.
-    @RequestMapping(method = RequestMethod.GET)
-    public String listWorkHours(Model model) {
-        List<WorkHour> workHours = repository.findAll();
-        model.addAttribute("workHours", workHours);
-        return "index";
+	// LISTAA KAIKKI TYÖTUNNIT
+	@RequestMapping(value = { "/", "/workhour" })
+	public String workHourList(Model model) {
+		model.addAttribute("workhours", repository.findAll());
+		return "workhour";
+	}
+
+	// NÄYTÄ LOMAKE UUDEN TYÖTUNNIN LISÄÄMISEKSI
+	@RequestMapping(value = "/addhours")
+	public String addWorkHour(Model model) {
+		model.addAttribute("workhour", new WorkHour());
+		return "addhours";
+	}
+
+	// TALLENTAA TYÖTUNNIN
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public String saveWorkHour(@ModelAttribute WorkHour workhour) {
+		repository.save(workhour);
+		return "redirect:workhour";
+	}
+	// TYÖTUNNIN POISTAMINEN
+	@RequestMapping(value = "/workhour/{id}", method = RequestMethod.GET)
+    public String workhourWithId(@PathVariable("id") Long id) {
+		repository.deleteById(id);   
+        // Lopuksi uudelleenohjaa '/workhour'
+        return "redirect:/workhour";
     }
+	   // NÄYTÄ MUOKKAUSLOMAKE
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String showEditForm(@PathVariable("id") Long id, Model model) {
+	    Optional<WorkHour> workhourOptional = repository.findById(id);
+	    if (workhourOptional.isPresent()) {
+	        model.addAttribute("workhour", workhourOptional.get());
+	        return "edit"; 
+	    } else {
+	        return "redirect:/workhour";
+	    }
+	}
 
-    // NÄYTÄ LOMAKE UUDEN TYÖTUNNIN LISÄÄMISEKSI
-    // Käytetään näyttämään lomake, jolla voi lisätä uuden työtunnin.
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String showAddForm(Model model) {
-        model.addAttribute("workHour", new WorkHour());
-        return "add";
-    }
-
-    // LISÄÄ UUSI TYÖTUNTI
-    // Käytetään lisäämään uusi työtunti tietokantaan.
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addWorkHour(@ModelAttribute WorkHour workHour) {
-        repository.save(workHour);
-        return "redirect:/index";
-    }
-
-    // NÄYTÄ LOMAKE TYÖTUNNIN MUOKKAAMISEKSI
-    // Käytetään näyttämään lomake, jolla voi muokata olemassa olevaa työtuntia.
-    @RequestMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") long id, Model model) {
-        Optional<WorkHour> workHourOptional = repository.findById(id);
-        if (workHourOptional.isPresent()) {
-            model.addAttribute("workHour", workHourOptional.get());
-            return "edit";
-        } else {
-            return "redirect:/index";
+    // PÄIVITÄ TYÖTUNTI (POST)
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String updateWorkHour(@PathVariable("id") Long id, @ModelAttribute("workHour") WorkHour updatedWorkHour) {
+        Optional<WorkHour> workhourOptional = repository.findById(id);
+        if (workhourOptional.isPresent()) {
+            WorkHour existingWorkHour = workhourOptional.get();
+            existingWorkHour.setDate(updatedWorkHour.getDate());
+            existingWorkHour.setHours(updatedWorkHour.getHours());
+            repository.save(existingWorkHour);
         }
+        return "redirect:/workhour";
     }
-
-    // PÄIVITÄ OLEMASSA OLEVA TYÖTUNTI
-    // Käytetään päivittämään olemassa oleva työtunti tietokantaan.
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String updateWorkHour(@PathVariable("id") long id, @ModelAttribute WorkHour workHour) {
-        if (repository.existsById(id)) {
-            workHour.setId(id);
-            repository.save(workHour);
-        }
-        return "redirect:/index";
-    }
-
-    // POISTA TYÖTUNTI
-    // Käytetään poistamaan työtunti tietokannasta.
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteWorkHour(@PathVariable("id") long id) {
-        repository.deleteById(id);
-        return "redirect:/index";
-    }
+//	// FUNCTIONALITY FOR EDITING BOOKS
+//
+//	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+//	public String editWorkHour(@PathVariable("id") Long Id, Model model) {
+//
+//		Optional<WorkHour> optionalWorkHour = repository.findById(Id);
+//
+//		if (optionalWorkHour.isPresent()) {
+//			WorkHour workhour = optionalWorkHour.get();
+//			model.addAttribute("WorkHour", workhour);
+//	 	 // model.addAttribute("Date", repository.findAll());
+//
+//			return "edit";
+//		} else {
+//			return "redirect:/workhour";
+//		}
+//	}
+//
+//	// FUNCTIONALITY FOR UPDATING EDITED BOOKS
+//
+//	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+//	public String updateWorkHour(@ModelAttribute WorkHour updatedWorkHour) {
+//
+//		WorkHour existingWorkHour = repository.findById(updatedWorkHour.getId()).orElse(null);
+//		if (existingWorkHour != null) {
+//			// Päivitä tunnin tiedot
+//			existingWorkHour.setDate(updatedWorkHour.getDate());
+//			existingWorkHour.setHours(updatedWorkHour.getHours());
+//
+//			repository.save(existingWorkHour);
+//			return "redirect:/workhour";
+//
+//		} else {
+//			return "redirect:/workhour";
+//		}
+//
+//	}
 }

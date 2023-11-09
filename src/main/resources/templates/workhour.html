@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>WorkHour List</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	width: 80%;
+	margin: auto;
+	overflow: hidden;
+}
+
+h1 {
+	color: #333;
+	text-align: center;
+	padding-top: 20px;
+}
+
+table {
+	width: 100%;
+	margin-top: 20px;
+	border-collapse: collapse;
+}
+
+table, th, td {
+	border: 1px solid #ddd;
+}
+
+th, td {
+	padding: 10px;
+	text-align: left;
+}
+
+th {
+	background-color: #f2f2f2;
+}
+
+.btn, .link-btn {
+	display: inline-block;
+	padding: 5px 10px;
+	background-color: #007bff;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.link-btn {
+	background-color: #dc3545; /* Red for delete buttons */
+}
+
+.btn:hover, .link-btn:hover {
+	opacity: 0.9;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h1>WorkHour List</h1>
+		<table>
+			<tr>
+				<th>Date</th>
+				<th>Hours</th>
+				<th>Actions</th>
+			</tr>
+			<tr th:each="workhour : ${workhours}">
+				<td th:text="${workhour.date}"></td>
+				<td th:text="${workhour.hours}"></td>
+				<td>
+					<a th:href="@{/edit/{id}(id=${workhour.id})}" class="btn">Edit</a>
+					<a th:href="@{/workhour/{id}(id=${workhour.id})}" class="link-btn">Delete</a>
+				</td>
+			</tr>
+		</table>
+		<a href="/addhours" class="btn">Add WorkHour</a>
+	</div>
+</body>
+</html>
