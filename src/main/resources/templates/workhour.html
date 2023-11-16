@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>WorkHour List</title>
+<title>Workhour List</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>
 body {
@@ -17,7 +17,7 @@ body {
 	overflow: hidden;
 }
 
-h1 {
+h1, h2 {
 	color: #333;
 	text-align: center;
 	padding-top: 20px;
@@ -64,8 +64,9 @@ th {
 </head>
 <body>
 	<div class="container">
-		<h1>WorkHour List</h1>
+		<h1>Workhour List</h1>
 		<table>
+				<h2>Total Hours: <span th:text="${totalHours}">0</span></h2>
 			<tr>
 				<th>Date</th>
 				<th>Hours</th>
@@ -74,13 +75,12 @@ th {
 			<tr th:each="workhour : ${workhours}">
 				<td th:text="${workhour.date}"></td>
 				<td th:text="${workhour.hours}"></td>
-				<td>
-					<a th:href="@{/edit/{id}(id=${workhour.id})}" class="btn">Edit</a>
+				<td><a th:href="@{/edit/{id}(id=${workhour.id})}" class="btn">Edit</a>
 					<a th:href="@{/workhour/{id}(id=${workhour.id})}" class="link-btn">Delete</a>
 				</td>
 			</tr>
 		</table>
-		<a href="/addhours" class="btn">Add WorkHour</a>
+		<a href="/addhours" class="btn">Add Workhour</a>
 	</div>
 </body>
-</html>
+</html> 

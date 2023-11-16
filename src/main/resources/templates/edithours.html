@@ -3,46 +3,74 @@
 <head>
     <title>Muokkaa Työtunti</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            overflow: hidden;
+            padding-top: 50px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Muokkaa Työtunti</h1>
-    <div>
+    <div class="container">
+        <h1>Muokkaa Työtunti</h1>
         <form th:object="${workHour}" th:action="@{/edit/{id}(id=${workHour.id})}" method="post">
             <input type="hidden" th:field="*{id}" />
-            
-            <label for="date">Päivämäärä:</label>
-            <input type="date" id="date" th:field="*{date}" required /><br>
-            
-            <label for="hours">Tunnit:</label>
-            <input type="number" id="hours" th:field="*{hours}" required /><br>
-            
+            <div class="form-group">
+                <label for="date">Päivämäärä:</label>
+                <input type="date" id="date" th:field="*{date}" required />
+            </div>
+            <div class="form-group">
+                <label for="hours">Tunnit:</label>
+                <input type="number" id="hours" th:field="*{hours}" required />
+            </div>
             <input type="submit" value="Päivitä" />
         </form>
     </div>
 </body>
 </html>
 
-<!-- <!DOCTYPE html> -->
-<!-- <html xmlns:th="http://www.thymeleaf.org"> -->
-<!-- <head> -->
-<!--     <meta charset="UTF-8"> -->
-<!--     <title>Muokkaa Työtunti</title> -->
-<!-- </head> -->
-<!-- <body> -->
-<!--     <h1>Muokkaa Työtunti</h1> -->
-<!--     <form th:action="@{/edit/{id}(id=${workHour.id})}" th:object="${workHour}" method="post"> -->
-<!--         <input type="hidden" th:field="*{id}"> -->
-<!--         <label for="date">Päivämäärä:</label> -->
-<!--         <input type="date" th:field="*{date}" required><br> -->
-<!--         <label for="hours">Tunnit:</label> -->
-<!--         <input type="number" th:field="*{hours}" required><br> -->
-<!--         <button type="submit">Päivitä</button> -->
-<!--     </form> -->
 
-<!--     Lisätty delete-toiminto -->
-<!--     <form th:action="@{/delete/{id}(id=${workHour.id})}" method="post"> -->
-<!--         <button type="submit">Poista</button> -->
-<!--     </form> -->
-<!-- </body> -->
-<!-- </html> --
+
 

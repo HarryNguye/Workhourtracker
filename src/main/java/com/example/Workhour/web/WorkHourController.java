@@ -19,14 +19,22 @@ public class WorkHourController {
 	@Autowired
 	private WorkHourRepository repository;
 
-	// LISTAA KAIKKI TYÖTUNNIT
-	@RequestMapping(value = { "/", "/workhour" })
+	@RequestMapping(value="/login")
+    public String login() {	
+        return "login";
+    }	
+	
+	//Listaa kaikki työtunnit ja totalhours laskee kaikki työtunnit yhteensä
+	
+	@RequestMapping(value = "/workhour", method = RequestMethod.GET)
 	public String workHourList(Model model) {
-		model.addAttribute("workhours", repository.findAll());
-		return "workhour";
+	    model.addAttribute("workhours", repository.findAll());
+	    model.addAttribute("totalHours", repository.sumTotalHours()); // Lisätään kokonaistuntien määrä
+	    return "workhour";
 	}
 
 	// NÄYTÄ LOMAKE UUDEN TYÖTUNNIN LISÄÄMISEKSI
+	
 	@RequestMapping(value = "/addhours")
 	public String addWorkHour(Model model) {
 		model.addAttribute("workhour", new WorkHour());
@@ -34,6 +42,7 @@ public class WorkHourController {
 	}
 
 	// TALLENTAA TYÖTUNNIN
+	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveWorkHour(@ModelAttribute WorkHour workhour) {
 		repository.save(workhour);
@@ -41,6 +50,7 @@ public class WorkHourController {
 	}
 	// TYÖTUNNIN POISTAMINEN
 	@RequestMapping(value = "/workhour/{id}", method = RequestMethod.GET)
+	
     public String workhourWithId(@PathVariable("id") Long id) {
 		repository.deleteById(id);   
         // Lopuksi uudelleenohjaa '/workhour'
@@ -48,18 +58,21 @@ public class WorkHourController {
     }
 	   // NÄYTÄ MUOKKAUSLOMAKE
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	
 	public String showEditForm(@PathVariable("id") Long id, Model model) {
 	    Optional<WorkHour> workhourOptional = repository.findById(id);
 	    if (workhourOptional.isPresent()) {
-	        model.addAttribute("workhour", workhourOptional.get());
-	        return "edit"; 
+	        model.addAttribute("workHour", workhourOptional.get());
+	        return "edithours";
 	    } else {
 	        return "redirect:/workhour";
 	    }
 	}
-
+	
+    
     // PÄIVITÄ TYÖTUNTI (POST)
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    
     public String updateWorkHour(@PathVariable("id") Long id, @ModelAttribute("workHour") WorkHour updatedWorkHour) {
         Optional<WorkHour> workhourOptional = repository.findById(id);
         if (workhourOptional.isPresent()) {
@@ -70,41 +83,6 @@ public class WorkHourController {
         }
         return "redirect:/workhour";
     }
-//	// FUNCTIONALITY FOR EDITING BOOKS
-//
-//	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-//	public String editWorkHour(@PathVariable("id") Long Id, Model model) {
-//
-//		Optional<WorkHour> optionalWorkHour = repository.findById(Id);
-//
-//		if (optionalWorkHour.isPresent()) {
-//			WorkHour workhour = optionalWorkHour.get();
-//			model.addAttribute("WorkHour", workhour);
-//	 	 // model.addAttribute("Date", repository.findAll());
-//
-//			return "edit";
-//		} else {
-//			return "redirect:/workhour";
-//		}
-//	}
-//
-//	// FUNCTIONALITY FOR UPDATING EDITED BOOKS
-//
-//	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-//	public String updateWorkHour(@ModelAttribute WorkHour updatedWorkHour) {
-//
-//		WorkHour existingWorkHour = repository.findById(updatedWorkHour.getId()).orElse(null);
-//		if (existingWorkHour != null) {
-//			// Päivitä tunnin tiedot
-//			existingWorkHour.setDate(updatedWorkHour.getDate());
-//			existingWorkHour.setHours(updatedWorkHour.getHours());
-//
-//			repository.save(existingWorkHour);
-//			return "redirect:/workhour";
-//
-//		} else {
-//			return "redirect:/workhour";
-//		}
-//
-//	}
+    
+
 }
