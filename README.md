@@ -11,9 +11,9 @@
 * JSON Responses: Work hours are presented in a clear JSON format with unique identifiers.
 
 How to Use:
-* Adding Hours**: Submit work hours through a simple form which then displays as JSON data.
-* Editing Hours**: Update existing work hour entries as needed.
-* Deleting Hours**: Remove work hour records from the database.
+* Adding Hours: Submit work hours through a simple form which then displays as JSON data.
+* Editing Hours: Update existing work hour entries as needed.
+* Deleting Hours: Remove work hour records from the database.
 
 # Technologies Used:
 * Java
