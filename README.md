@@ -15,8 +15,6 @@ How to Use:
 * Editing Hours**: Update existing work hour entries as needed.
 * Deleting Hours**: Remove work hour records from the database.
 
-Make sure to populate the `.env` file with necessary configurations such as database connection settings before starting the application.
-
 # Technologies Used:
 * Java
 * Spring Boot for REST API creation
